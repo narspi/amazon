@@ -8,13 +8,10 @@ import {addToBasket as addToBasketAction } from '../slices/basketSlice';
 const MIN_RATING = 3;
 const MAX_RATING = 5;
 
-function Product(item) {
-  const { title, image, category, description, price } = item;
-  const [rating, setRating] = useState(
-    // Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1)) + MIN_RATING
-  );
+function Product({item}) {
+  const { title, image, category, description, price, rating } = item;
+  const ratingCountStar = Math.round(rating.rate);
   const [hasPrime] = useState(true);
-
   const dispatch = useDispatch();
 
   const addToBasket = () => {
@@ -29,7 +26,7 @@ function Product(item) {
       <Image src={image} height={200} width={200} objectFit="contain" />
       <h3 className="my-3">{title}</h3>
       <div className="flex text-yellow-500">
-        {Array(rating)
+        {Array(ratingCountStar)
           .fill(1)
           .map((_, i) => (
             <StarIcon key={i} className="h-5" />
@@ -37,7 +34,7 @@ function Product(item) {
       </div>
       <p className="text-xs my-2 line-clamp-2">{description}</p>
       <div className="mb-5">
-        <Currency quantity={price} currency="GBP" />
+        <Currency quantity={price}/>
       </div>
       {hasPrime && (
         <div className="flex items-center space-x-2 -mt-5">
