@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 import Head from "next/head";
 import Header from "../components/Header";
 import Banner from "../components/Banner";
@@ -20,11 +22,10 @@ export default function Home(props) {
   );
 }
 
-export async function getServerSideProps(ctx) {
+export async function getServerSideProps() {
   try {
-    const products = await fetch("https://fakestoreapi.com/products").then(
-      (res) => res.json()
-    );
+    const response = await axios.get("https://fakestoreapi.com/products");
+    const products = response.data;
     return {
       props: {
         products: products,
@@ -39,3 +40,6 @@ export async function getServerSideProps(ctx) {
     };
   }
 }
+
+
+
