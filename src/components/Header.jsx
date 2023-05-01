@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { MagnifyingGlassIcon,ShoppingCartIcon,Bars3Icon } from "@heroicons/react/24/outline";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Header = () => {
+  const { data: session } = useSession();
   return (
     <header>
       <div className="bg-amazon_blue px-1 py-2 flex items-center justify-between">
@@ -20,7 +22,7 @@ const Header = () => {
           <MagnifyingGlassIcon className="w-12 h-12 p-4" />
         </div>
         <div className="text-white flex items-center text-xs space-x-3 sm:space-x-6 mx-2 sm:mx-6">
-          <div className="link">
+          <div className="link" onClick={session? signOut: signIn}>
             <p>Hello alexander</p>
             <p className="font-extrabold md:text-sm">Accounts & lists</p>
           </div>
