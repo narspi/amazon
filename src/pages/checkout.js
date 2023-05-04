@@ -51,7 +51,7 @@ export default function Checkout() {
           </div>
         </div>
         {lengthItems > 0 && (
-          <div className="flex flex-col p-10">
+          <div className="flex flex-col p-10 lg:w-72">
             <h2 className="whitespace-nowrap">
               Subtotal ({lengthItems} items):
               <span className="font-bold">{` ${formatter.format(totalPrice)}`}</span>
