@@ -30,3 +30,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+/src/stripe_1.14.1_windows_x86_64.zip
+/src/stripe_1.14.1_windows_x86_64

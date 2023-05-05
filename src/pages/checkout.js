@@ -3,8 +3,13 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { selectItems } from "@/store/slices/basketSlice";
 import CheckoutProduct from "@/components/CheckoutProduct";
-import { selectItemsLength,selectTotalPrice } from "@/store/slices/basketSlice";
+import {
+  selectItemsLength,
+  selectTotalPrice,
+} from "@/store/slices/basketSlice";
 import { useSession } from "next-auth/react";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
 
 export default function Checkout() {
   const items = useSelector(selectItems);
@@ -15,6 +20,22 @@ export default function Checkout() {
     currency: "GBP",
   });
   const { data: session } = useSession();
+
+  const stripePromise = loadStripe(process.env.stripe_public_key);
+
+  const createCheckoutSesion = async () => {
+    const stripe = await stripePromise;
+    const res = await axios.post("/api/create-checkout-session", {
+      items: items,
+      email: session.user.email,
+    });
+
+    const result = await stripe.redirectToCheckout({
+      sessionId: res.data.id,
+    });
+
+    if (result.error) alert(result.error.message);
+  };
 
   return (
     <div className="bg-gray-100">
@@ -54,7 +75,9 @@ export default function Checkout() {
           <div className="flex flex-col p-10 lg:w-72">
             <h2 className="whitespace-nowrap">
               Subtotal ({lengthItems} items):
-              <span className="font-bold">{` ${formatter.format(totalPrice)}`}</span>
+              <span className="font-bold">{` ${formatter.format(
+                totalPrice
+              )}`}</span>
             </h2>
             <button
               className={`button mt-2 ${
@@ -63,7 +86,7 @@ export default function Checkout() {
                   : ""
               }`}
               disabled={!session}
-              onClick={() => {console.log('click')}}
+              onClick={createCheckoutSesion}
             >
               {!session ? "Sign in to checkout" : "Proceed to checkout"}
             </button>

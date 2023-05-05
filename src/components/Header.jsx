@@ -33,8 +33,8 @@ const Header = () => {
         </div>
         <div className="text-white flex items-center text-xs space-x-3 sm:space-x-6 mx-2 sm:mx-6">
           <div className="link" onClick={session ? signOut : signIn}>
-            <p>Hello alexander</p>
-            <p className="font-extrabold md:text-sm">Accounts & lists</p>
+            <p>{session? session.user.name: 'Hello guest'}</p>
+            <p className="font-extrabold md:text-sm">{session? 'Sign out': 'Accounts & lists'}</p>
           </div>
           <div className="link">
             <p>Returns</p>
