@@ -36,7 +36,6 @@ export default async (req, res) => {
         images: JSON.stringify(items.map((item) => item.image)),
       },
     });
-    console.log(session);
     res.status(200).json({ id: session.id });
   } catch (err) {
     res.status(err.statusCode || 500).json(err.message);
