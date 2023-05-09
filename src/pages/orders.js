@@ -1,10 +1,15 @@
 import Header from "../components/Header";
 import { getSession, useSession } from "next-auth/react";
 import getOrders from "../../firebase";
+import Order from "@/components/Order";
 
-export default function Orders({orders}) {
-  console.log(orders)
+export default function Orders({ orders }) {
   const { data: session } = useSession();
+  const formatter = new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+  });
+  //console.log(orders)
   return (
     <div className="bg-gray-100 relative">
       <Header />
@@ -13,9 +18,27 @@ export default function Orders({orders}) {
           Your orders
         </h1>
         {session ? (
-          <h2>x Orders</h2>
+          <h2>{orders.length} Orders</h2>
         ) : (
           <h2>Please sign in to see your orders</h2>
+        )}
+        {orders && (
+          <div className="mt-5 space-y-4">
+            {orders.map(
+              ({ id, amount, amount_shipping, images, items, timestamp }) => (
+                <Order
+                  key={id}
+                  id={id}
+                  amount={amount}
+                  amountShipping={amount_shipping}
+                  images={images}
+                  items={items}
+                  timestamp={timestamp}
+                  formatter={formatter}
+                />
+              )
+            )}
+          </div>
         )}
       </main>
     </div>
@@ -40,13 +63,14 @@ export async function getServerSideProps(ctx) {
       items: (
         await stripe.checkout.sessions.listLineItems(order.id, {
           limit: 100,
-      })).data,
+        })
+      ).data,
     }))
   );
 
   return {
     props: {
-      orders
+      orders,
     },
   };
 }

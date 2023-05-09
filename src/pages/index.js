@@ -4,6 +4,7 @@ import Head from "next/head";
 import Header from "../components/Header";
 import Banner from "../components/Banner";
 import ProductFeed from "../components/ProductFeed";
+import { getSession } from "next-auth/react";
 
 export default function Home(props) {
   return (
@@ -22,13 +23,15 @@ export default function Home(props) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx) {
   try {
+    const session = await getSession(ctx);
     const response = await axios.get("https://fakestoreapi.com/products");
     const products = response.data;
     return {
       props: {
         products: products,
+        session
       },
     };
   } catch (err) {
