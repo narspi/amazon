@@ -20,7 +20,7 @@ const fulfilOrder = (session) => {
     .doc(session.id)
     .set({
       amount: session.amount_total / 100,
-      amount_shipping: session.shipping_options.shipping_amount / 100,
+      amount_shipping: (session.amount_total - session.amount_subtotal) / 100,
       images: JSON.parse(session.metadata.images),
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
     })
@@ -45,8 +45,6 @@ export default async (req, res) => {
       console.log(`Error: ${err.message}`);
       return res.status(400).send(`Webhook error: ${err.message}`);
     }
-
-    console.log(event.type);
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;

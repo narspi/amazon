@@ -36,10 +36,10 @@ const Header = () => {
             <p>{session? session.user.name: 'Hello guest'}</p>
             <p className="font-extrabold md:text-sm">{session? 'Sign out': 'Accounts & lists'}</p>
           </div>
-          <div className="link">
+          <Link href='/orders' className="link">
             <p>Returns</p>
             <p className="font-extrabold md:text-sm">& Orders</p>
-          </div>
+          </Link>
           <Link href='/checkout' className="link relative flex items-center">
             <span className="absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-400 rounded-full text-center text-black font-bold">
               {lengthItems}
